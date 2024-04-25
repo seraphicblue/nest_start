@@ -1,11 +1,11 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { UserService } from '../services';
+import { CreateUserDto } from './dto/CreateUserDto';
+import { SignupResDto } from './dto/SignupResDto';
+import { UserService } from './services/user.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-\    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   //회원가입
   @Post('signup')
