@@ -1,9 +1,4 @@
 {
   "singleQuote": true,
-  "trailingComma": "all",
-  "endOfLine": "crlf",
-  "extends": [
-    "eslint:recommended",
-    "plugin:prettier/recommended"
-  ]
+  "trailingComma": "all"
 }
