@@ -42,4 +42,5 @@ export class User extends BaseEntity {
 
   @OneToMany(() => AccessLog, (log) => log.user)
   accessLogs: Relation<AccessLog[]>;
+    orders: any;
 }
