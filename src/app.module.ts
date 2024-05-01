@@ -10,6 +10,7 @@ import { AccessLog } from './auth/entities/access-log.entity';
 import { TokenBlacklist } from './auth/entities/token-blacklist.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validationSchema } from 'config/validation.schema';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { validationSchema } from 'config/validation.schema';
       inject: [ConfigService],
     }),
     AuthModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

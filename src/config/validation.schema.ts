@@ -9,10 +9,6 @@ export const validationSchema = Joi.object({
   // BACKEND
   BASE_URL: Joi.string().required(),
 
-  // SWAGGER
-  SWAGGER_ID: Joi.string().required(),
-  SWAGGER_PW: Joi.string().required(),
-
   // AUTH
   JWT_SECRET: Joi.string().required(),
   ACCESS_TOKEN_EXPIRY: Joi.string().required(),
