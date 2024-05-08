@@ -1,73 +1,78 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Auth 서비스 
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+**Auth 서비스**는 사용자의 인증과 권한 관리를 담당하는 중요한 모듈입니다. JWT를 활용한 인증, 액세스 및 리프레시 토큰 관리, 토큰 블랙리스트 처리, 접속 로그 기록 등의 기능을 제공합니다.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 기술 스택 
 
-## Description
+- **TypeScript + NestJS + SWC**
+- **TypeORM + PostgreSQL**
+- **Joi**
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 주요 기능 
 
-## Installation
+### 로그인 (login)
+- **사용자 검증**: 이메일과 비밀번호를 통해 사용자를 검증합니다.
+- **토큰 생성**: 검증된 사용자에 대해 액세스 및 리프레시 토큰을 생성합니다.
+- **접속 로그 저장**: 사용자의 접속 정보를 로그로 저장합니다.
 
-```bash
-$ npm install
-```
+### 토큰 갱신 (refreshAccessToken)
+- **리프레시 토큰 검증**: 제공된 리프레시 토큰을 검증하고 유효한 경우 새로운 액세스 토큰을 발급합니다.
 
-## Running the app
+### 로그아웃 (logout)
+- **토큰 블랙리스트**: 로그아웃 시 사용자의 현재 토큰을 블랙리스트에 추가하여 더 이상 사용할 수 없게 합니다.
 
-```bash
-# development
-$ npm run start
+### 토큰 블랙리스트 관리
+- **추가 및 조회**: 특정 토큰을 블랙리스트에 추가하거나 조회하는 기능을 제공합니다.
 
-# watch mode
-$ npm run start:dev
+## 보안 및 최적화 🛡️
+- **argon2**: 비밀번호 해싱에 argon2 알고리즘을 사용하여 보안을 강화합니다.
+- **JWT 블랙리스트**: 로그아웃 또는 다른 이유로 무효화된 토큰을 관리하여 보안을 더욱 강화합니다.
+- **접속 로그**: 사용자의 모든 접속 정보를 로그로 기록하여 추후 분석 및 모니터링에 활용합니다.
 
-# production mode
-$ npm run start:prod
-```
+## 예외 처리 🚧
+Auth 서비스는 다음과 같은 예외 처리를 수행합니다:
 
-## Test
+- **인증 실패 (Invalid Credentials)**:
+  - 제공된 이메일과 비밀번호가 일치하지 않을 경우 `invalid-credentials` 오류를 반환합니다.
 
-```bash
-# unit tests
-$ npm run test
+- **사용자 찾을 수 없음 (User Not Found)**:
+  - 토큰에 포함된 사용자 ID가 데이터베이스에 없는 경우 `user-not-found` 오류를 반환합니다.
 
-# e2e tests
-$ npm run test:e2e
+- **유효하지 않은 리프레시 토큰 (Invalid Refresh Token)**:
+  - 제공된 리프레시 토큰이 유효하지 않을 경우 `invalid-refresh-token` 오류를 반환합니다.
 
-# test coverage
-$ npm run test:cov
-```
+- **유효하지 않은 만료 시간 (Invalid Expiry Time)**:
+  - 토큰의 만료 시간이 유효하지 않은 형식인 경우 `invalid-expiry` 오류를 반환합니다.
 
-## Support
+이러한 예외 처리는 사용자와 시스템 간의 상호 작용을 안전하게 하고, 예상치 못한 오류로부터 시스템을 보호하는 역할을 합니다.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 디렉토리 구조 
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+```plaintext
+src/auth
+├── auth.module.ts
+├── controllers
+│   ├── auth.controller.ts
+│   └── index.ts
+├── dto
+│   ├── index.ts
+│   └── login-res.dto.ts
+├── entities
+│   ├── access-log.entity.ts
+│   ├── access-token.entity.ts
+│   ├── index.ts
+│   ├── refresh-token.entity.ts
+│   ├── token-blacklist.entity.ts
+│   └── user.entity.ts
+├── repositories
+│   ├── access-log.repository.ts
+│   ├── access-token.repository.ts
+│   ├── index.ts
+│   ├── refresh-token.repository.ts
+│   ├── token-blacklist.repository.ts
+│   └── user.repository.ts
+└── services
+    ├── auth.service.ts
+    ├── index.ts
+    ├── token-blacklist.service.ts
+    └── user.service.ts
